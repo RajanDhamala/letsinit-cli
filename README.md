@@ -170,6 +170,9 @@ my-fiber-api/
 ##  Getting Started After Installation
 
 ### React Projects
+
+React projects require Node.js 22.22 or newer.
+
 ```bash
 cd your-project-name
 npm run dev
