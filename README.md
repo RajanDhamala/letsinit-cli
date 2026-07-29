@@ -1,19 +1,20 @@
 # StackForge CLI 
 
-> **The fastest way to bootstrap modern web development projects with pre-configured setups**
+> **Bootstrap modern web, API, and mobile projects from pre-configured templates**
 
-StackForge CLI is a powerful command-line tool that instantly scaffolds production-ready projects with your favorite tech stacks. Skip the tedious setup and jump straight into coding with pre-configured boilerplate code, routing, styling, and essential packages.
+StackForge CLI is an interactive command-line tool that scaffolds ready-to-use starter projects. Choose a stack and package manager, name the project, and start building from a configured template.
 
 ##  Features
 
--  **4 Popular Stack Options**: React (JS/TS) and Express (Prisma/Mongoose)
+- **8 Ready-to-use Stack Options**: React, Express, Expo, Fiber, Django, and FastAPI
+- **Bundled Templates**: Project files ship with the CLI, so Git is not required
 - **Lightning Fast Setup**: Get a complete project running in under 2 minutes
--  **Pre-configured Styling**: Tailwind CSS ready to go
+- **Pre-configured Frontend Styling**: Tailwind CSS for React and NativeWind for Expo
 -  **Built-in Routing**: React Router and Express routes already set up
--  **Authentication Boilerplate**: JWT auth patterns included
--  **Advanced Package Options**: Optional extras like WebSocket, Redis, Socket.IO
+- **Authentication Boilerplate**: JWT patterns in the Express and Fiber templates
 -  **Beautiful CLI Experience**: Interactive prompts with colorful feedback
--  **Smart Configuration**: Auto-generates .env files and project structure
+- **npm or pnpm**: Choose the package manager for Node.js and Expo templates
+- **Smart Configuration**: Creates the project structure, prepares `.env`, and installs ecosystem dependencies
 
 ##  Quick Start
 
@@ -21,23 +22,23 @@ StackForge CLI is a powerful command-line tool that instantly scaffolds producti
 
 ```bash
 # Run directly with npx (recommended)
-npx stackforge-cli
+npx stack-installer-cli
 
 # Or install globally
-npm install -g stackforge-cli
-stackforge-cli
+npm install -g stack-installer-cli
+stack-installer
 ```
 
 ### Basic Usage
 
 ```bash
-npx stackforge-cli
+npx stack-installer-cli
 ```
 
 Follow the interactive prompts to:
 1. Choose your tech stack
-2. Name your project
-3. Select additional packages (optional)
+2. Choose npm or pnpm for Node.js and Expo projects
+3. Name your project
 
 ##  Available Stacks
 
@@ -45,8 +46,24 @@ Follow the interactive prompts to:
 |-------|-------------|----------|
 | **React + JS** | Modern React with JavaScript | Vite, React Router, Tailwind CSS, ESLint |
 | **React + TS** | React with TypeScript | Vite, React Router, Tailwind CSS, TypeScript, ESLint |
-| **Express + Prisma** | Node.js API with Prisma ORM | Express, Prisma, JWT Auth, CORS, Helmet |
-| **Express + Mongoose** | Node.js API with MongoDB | Express, Mongoose, JWT Auth, CORS, Helmet |
+| **Express + Prisma** | Node.js API with Prisma ORM | Express, Prisma, PostgreSQL, JWT, CORS, Zod |
+| **Express + Mongoose** | Node.js API with MongoDB | Express, Mongoose, JWT, CORS, Zod |
+| **Fiber + SQLC** | Go API with generated database queries | Fiber, SQLC, pgx, PostgreSQL |
+| **Django** | Basic Python web project | Django, CORS, dotenv, SQLite |
+| **FastAPI** | Basic Python API | FastAPI, Uvicorn, CORS, dotenv |
+| **Expo** | Minimal React Native app | Expo SDK, TypeScript, NativeWind, Tailwind CSS |
+
+Each stack is maintained as a directory under `templates/` on the main branch.
+The CLI copies the selected template into the new project and then installs its
+dependencies. There is no boilerplate repository clone or stack-specific Git
+branch to keep synchronized.
+
+### Docker package manager
+
+Node templates that include a Dockerfile keep the npm stages active by default
+and provide complete pnpm stages as a commented alternative. When generating a
+project with pnpm, comment the npm section and uncomment the pnpm section before
+building its image.
 
 ##  CLI Parameters
 
@@ -54,37 +71,17 @@ Follow the interactive prompts to:
 
 | Flag | Description | Example |
 |------|-------------|---------|
-| `-v, --verbose` | Show detailed output during installation | `npx stackforge-cli -v` |
-| `-a, --advanced` | Enable advanced package selection | `npx stackforge-cli -a` |
-
-### Advanced Mode Packages
-
-When using the `-a` flag, you can select additional packages:
-
-#### React Projects
-- **WebSocket** - Real-time communication
-- **@acernity/ui** - Beautiful UI components
-
-#### Express Projects  
-- **Redis** - In-memory data store and caching
-- **Socket.IO** - Real-time bidirectional communication
-- **Bull Queue** - Job queue system
-- **Kafka** - Event streaming platform
+| `-v, --verbose` | Show detailed output during installation | `npx stack-installer-cli -v` |
 
 ### Examples
 
 ```bash
 # Standard interactive setup
-npx stackforge-cli
+npx stack-installer-cli
 
 # Verbose mode (see all installation details)
-npx stackforge-cli -v
+npx stack-installer-cli -v
 
-# Advanced mode with extra packages
-npx stackforge-cli -a
-
-# Combine flags
-npx stackforge-cli -v -a
 ```
 
 ##  Project Structure
@@ -118,6 +115,24 @@ my-express-app/
 └── package.json
 ```
 
+### Fiber + SQLC Projects
+
+```text
+my-fiber-api/
+├── Controller/
+├── Middleware/
+├── Route/
+├── Utils/
+├── db/
+│   ├── migrations/
+│   ├── queries/
+│   └── sqlc/           # Generated by SQLC
+├── docker-compose.yml
+├── go.mod
+├── main.go
+└── sqlc.yaml
+```
+
 ##  What You Get Out of the Box
 
 ### Frontend (React)
@@ -136,8 +151,18 @@ my-express-app/
 -  **Error Handling** middleware
 -  **Request Validation** setup
 
+### Backend (Fiber + SQLC)
+
+- **Fiber** HTTP server
+- **SQLC-generated** type-safe PostgreSQL queries
+- **pgx** connection pooling
+- **PostgreSQL** development container with automatic schema initialization
+- **JWT cookie authentication** with register, login, current-user, and logout routes
+- Focused controller, middleware, route, and utility packages
+- Direct environment reads with `os.Getenv`
+
 ### Environment Setup
--  **Environment Variables** auto-configured
+-  **Environment Variables** prepared by renaming `.env.example` to `.env`
 -  **.gitignore** with sensible defaults
 -  **Package Scripts** for development and production
 -  **Development Workflow** ready
@@ -148,6 +173,7 @@ my-express-app/
 ```bash
 cd your-project-name
 npm run dev
+# or: pnpm run dev
 ```
 Your React app will be running on `http://localhost:5173`
 
@@ -155,21 +181,45 @@ Your React app will be running on `http://localhost:5173`
 ```bash
 cd your-project-name
 
-# For Prisma projects
-npx prisma migrate dev --name init
-npx prisma generate
+# For Prisma projects after PostgreSQL is available
+npm exec -- prisma migrate dev --name init
+# or: pnpm exec prisma migrate dev --name init
 
 # Start development server
 npm run dev
+# or: pnpm run dev
 ```
 Your API will be running on `http://localhost:8000`
+
+### Fiber + SQLC Projects
+
+```bash
+cd your-project-name
+docker-compose up -d postgres
+go run .
+```
+
+Your API will be running on `http://localhost:3000`.
+
+### Expo Projects
+
+```bash
+cd your-project-name
+npm run start
+# or: pnpm run start
+```
+
+### Django and FastAPI Projects
+
+The CLI prints the matching `pip install` and start commands after creating the
+project.
 
 ##  Customization
 
 All projects come with sensible defaults but are fully customizable:
 
 - **Tailwind CSS**: Modify `tailwind.config.js` for your design system
-- **ESLint**: Adjust rules in `.eslintrc.js`
+- **ESLint**: Adjust rules in `eslint.config.js`
 - **Vite**: Configure build options in `vite.config.js`
 - **Database**: Update Prisma schema or Mongoose models as needed
 
@@ -178,8 +228,15 @@ All projects come with sensible defaults but are fully customizable:
 We welcome contributions! If you'd like to add new stacks or improve existing ones:
 
 1. Fork the repository
-2. Create your feature branch
-3. Submit a pull request
+2. Update an existing directory under `templates/`, or add a new template directory
+3. Register a new template in `templateDirectories` and `stackChoices` in `cli.mjs`
+4. Run `npm pack --dry-run` to confirm the template is included in the package
+5. Submit a pull request
+
+Template `.gitignore` files are stored as `_gitignore` so npm includes them in
+the published package. The CLI renames the file to `.gitignore` when it creates
+a project. When a template contains `.env.example`, the CLI renames it to
+`.env` in the generated project.
 
 ##  License
 
@@ -194,6 +251,4 @@ Having issues? Found a bug?
 
 ---
 
-**Happy coding! 🎉** 
-
-*Built with  to save developers time and get you building faster.*
+**Happy coding! 🎉**

@@ -1,11 +1,18 @@
 {
   "name": "stack-installer-cli",
-  "version": "1.0.0",
-  "description": "CLI to setup multi-stack project",
+  "version": "1.1.0",
+  "description": "Interactive CLI for scaffolding frontend, backend, mobile, and API projects",
   "bin": {
     "stack-installer": "./cli.mjs"
   },
+  "files": [
+    "cli.mjs",
+    "templates"
+  ],
   "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "dependencies": {
     "chalk": "^5.6.2",
     "fs-extra": "^11.3.2",
@@ -17,7 +24,11 @@
     "installer",
     "stack",
     "react",
-    "node"
+    "node",
+    "expo",
+    "python",
+    "go",
+    "pnpm"
   ],
   "author": "Rajan Dhamala",
   "license": "MIT"
