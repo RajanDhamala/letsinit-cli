@@ -1,3 +1,4 @@
+import type { ComponentType } from "react";
 import { ArrowRight, Terminal, Zap, LayoutTemplate } from "lucide-react";
 
 const Pill = ({ label }: { label: string }) => (
@@ -12,7 +13,7 @@ const FeatureCard = ({
   title,
   text,
 }: {
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
   title: string;
   text: string;
 }) => (
@@ -39,15 +40,15 @@ const LandingPage = () => {
         <div className="flex items-center gap-2 md:gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl border bg-background/80 shadow-sm shadow-black/5 backdrop-blur">
             <span className="bg-gradient-to-tr from-primary to-primary/70 bg-clip-text text-xl font-semibold text-transparent">
-              SF
+              LI
             </span>
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-semibold tracking-tight md:text-base">
-              StackForge
+              LetsInit
             </span>
             <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground/80 md:text-[12px]">
-              stack-installer-cli
+              letsinit
             </span>
           </div>
         </div>
@@ -61,7 +62,7 @@ const LandingPage = () => {
             type="button"
             className="inline-flex items-center gap-1.5 rounded-full border bg-foreground px-4 py-1.5 font-semibold text-background shadow-sm shadow-black/10 transition hover:bg-foreground/90"
             onClick={() => {
-              window.open("https://github.com/RajanDhamala/stackforge-cli", "_blank", "noopener,noreferrer");
+              window.open("https://github.com/RajanDhamala/cli", "_blank", "noopener,noreferrer");
             }}
           >
             <svg
@@ -99,7 +100,7 @@ const LandingPage = () => {
               <br className="hidden sm:block" /> shipped from the CLI.
             </h1>
             <p className="max-w-xl text-sm text-muted-foreground sm:text-base">
-              <strong>stack-installer-cli</strong> by StackForge spins up React + TypeScript on the
+              <strong>letsinit</strong> spins up React + TypeScript on the
               front, and Express, Mongoose, and Prisma on the back. Opinionated,
               batteries‑included, and styled like a modern React starter — without
               the noise.
@@ -111,7 +112,7 @@ const LandingPage = () => {
             <button className="group inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-5 py-2.5
              text-sm font-semibold text-background shadow-[0_18px_45px_-18px_rgba(0,0,0,0.7)] transition hover:-translate-y-[1px] hover:bg-foreground/95"
               onClick={() => {
-                window.open("https://www.npmjs.com/package/stack-installer-cli", "_blank");
+                window.open("https://www.npmjs.com/package/letsinit", "_blank");
               }}>
               <Zap className="h-4 w-4" />
               Init my stack
@@ -119,7 +120,7 @@ const LandingPage = () => {
             </button>
 
             <div className="flex flex-wrap items-center gap-2">
-              <Pill label="npx stack-installer-cli" />
+              <Pill label="npx letsinit" />
             </div>
           </div>
 
@@ -154,7 +155,7 @@ const LandingPage = () => {
                 <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/80" />
               </div>
               <span className="rounded-full bg-muted px-2 py-0.5 font-medium">
-                stack-forge • dev
+                letsinit • dev
               </span>
             </div>
 
@@ -178,9 +179,9 @@ const LandingPage = () => {
               <div className="space-y-1 rounded-xl border bg-black/95 p-3 text-[11px] font-mono text-emerald-100">
                 <div className="flex items-center gap-2 text-emerald-400/80">
                   <Terminal className="h-3 w-3" />
-                  <span>stack-forge ▸ init</span>
+                  <span>letsinit ▸ init</span>
                 </div>
-                <p>$ npx stack-installer-cli</p>
+                <p>$ npx letsinit</p>
                 <p className="text-emerald-400/90">✔ Scaffolding React + TS + Vite app…</p>
                 <p className="text-emerald-400/90">
                   ✔ Adding Express, Mongoose, Prisma boilerplate…
@@ -200,4 +201,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-

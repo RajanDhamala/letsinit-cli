@@ -77,7 +77,7 @@ const runCommand = (command, options = {}, message) => {
 };
 
 const Main = async () => {
-  console.log(chalk.cyan.bold("\n StackForge Setup Starting...\n"));
+  console.log(chalk.cyan.bold("\n LetsInit Setup Starting...\n"));
   const stackChoices = [
     { name: "React + JS", value: "Js_react" },
     { name: "React + TS", value: "Ts_react" },
@@ -115,7 +115,7 @@ const Main = async () => {
     log(chalk.gray("Package manager:"), package_manager);
   }
 
-  let folder_name = "stackforge-project";
+  let folder_name = "letsinit-project";
 
   const { folder_name: fn } = await inquirer.prompt([
     {

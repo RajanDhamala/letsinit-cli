@@ -1,8 +1,8 @@
-# StackForge CLI 
+# LetsInit CLI
 
 > **Bootstrap modern web, API, and mobile projects from pre-configured templates**
 
-StackForge CLI is an interactive command-line tool that scaffolds ready-to-use starter projects. Choose a stack and package manager, name the project, and start building from a configured template.
+LetsInit is an interactive command-line tool that scaffolds ready-to-use starter projects. Choose a stack and package manager, name the project, and start building from a configured template.
 
 ##  Features
 
@@ -22,17 +22,17 @@ StackForge CLI is an interactive command-line tool that scaffolds ready-to-use s
 
 ```bash
 # Run directly with npx (recommended)
-npx stack-installer-cli
+npx letsinit
 
 # Or install globally
-npm install -g stack-installer-cli
-stack-installer
+npm install -g letsinit
+letsinit
 ```
 
 ### Basic Usage
 
 ```bash
-npx stack-installer-cli
+npx letsinit
 ```
 
 Follow the interactive prompts to:
@@ -72,16 +72,16 @@ building its image.
 
 | Flag | Description | Example |
 |------|-------------|---------|
-| `-v, --verbose` | Show detailed output during installation | `npx stack-installer-cli -v` |
+| `-v, --verbose` | Show detailed output during installation | `npx letsinit -v` |
 
 ### Examples
 
 ```bash
 # Standard interactive setup
-npx stack-installer-cli
+npx letsinit
 
 # Verbose mode (see all installation details)
-npx stack-installer-cli -v
+npx letsinit -v
 
 ```
 
@@ -253,18 +253,14 @@ All projects come with sensible defaults but are fully customizable:
 
 ##  Contributing
 
-We welcome contributions! If you'd like to add new stacks or improve existing ones:
+Contributions are welcome. You can add a new starter template, improve an
+existing template, fix the CLI, or update the documentation.
 
-1. Fork the repository
-2. Update an existing directory under `templates/`, or add a new template directory
-3. Register a new template in `templateDirectories` and `stackChoices` in `cli.mjs`
-4. Run `npm pack --dry-run` to confirm the template is included in the package
-5. Submit a pull request
+Start by forking the repository, create a branch in your fork, make and validate
+your changes, and then open a pull request against the main repository.
 
-Template `.gitignore` files are stored as `_gitignore` so npm includes them in
-the published package. The CLI renames the file to `.gitignore` when it creates
-a project. When a template contains `.env.example`, the CLI renames it to
-`.env` in the generated project.
+Read [CONTRIBUTING.md](./CONTRIBUTING.md) for the complete workflow and template
+requirements.
 
 ##  License
 
@@ -273,7 +269,7 @@ MIT License - feel free to use this in your projects!
 ##  Support
 
 Having issues? Found a bug? 
-- Open an issue on [GitHub](https://github.com/RajanDhamala/stackforge-cli)
+- Open an issue on [GitHub](https://github.com/RajanDhamala/cli)
 - Check our documentation
 - Ask questions in discussions
 

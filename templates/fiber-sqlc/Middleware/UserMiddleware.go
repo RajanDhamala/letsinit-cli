@@ -6,7 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
-	utils "stackforge/fiber-sqlc/Utils"
+	utils "letsinit/fiber-sqlc/Utils"
 )
 
 func AuthUser(c *fiber.Ctx) error {

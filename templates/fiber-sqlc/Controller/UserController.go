@@ -10,8 +10,8 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 
-	utils "stackforge/fiber-sqlc/Utils"
-	sqlc "stackforge/fiber-sqlc/db/sqlc"
+	utils "letsinit/fiber-sqlc/Utils"
+	sqlc "letsinit/fiber-sqlc/db/sqlc"
 )
 
 type Controller struct {

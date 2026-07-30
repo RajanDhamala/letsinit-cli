@@ -4,7 +4,7 @@ A Fiber API with SQLC-generated queries, pgx, PostgreSQL, and JWT cookie authent
 
 ## Run locally
 
-The StackForge CLI creates `.env` from `.env.example`. The application loads
+The LetsInit CLI creates `.env` from `.env.example`. The application loads
 that file automatically during local development:
 
 ```bash
@@ -30,7 +30,7 @@ Register and save the authentication cookies:
 ```bash
 curl -c cookies.txt -X POST http://localhost:3000/users/register \
   -H 'Content-Type: application/json' \
-  -d '{"username":"StackForge User","email":"user@example.com","password":"strong-password"}'
+  -d '{"username":"LetsInit User","email":"user@example.com","password":"strong-password"}'
 ```
 
 Read the authenticated user:

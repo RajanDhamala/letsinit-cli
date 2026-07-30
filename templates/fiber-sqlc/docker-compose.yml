@@ -2,9 +2,9 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-stackforge}
-      POSTGRES_USER: ${POSTGRES_USER:-stackforge}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-stackforge}
+      POSTGRES_DB: ${POSTGRES_DB:-letsinit}
+      POSTGRES_USER: ${POSTGRES_USER:-letsinit}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-letsinit}
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     healthcheck:

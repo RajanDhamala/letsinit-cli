@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 const connectDB = async () => {
      try {
-          const mongoUrl = process.env.MONGODB_URL || "mongodb://127.0.0.1:27017/stackforge"
+          const mongoUrl = process.env.MONGODB_URL || "mongodb://127.0.0.1:27017/letsinit"
           await mongoose.connect(mongoUrl)
           console.log("connected to the mongodb server");
      } catch (Err) {

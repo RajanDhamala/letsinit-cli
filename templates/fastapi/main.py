@@ -15,7 +15,7 @@ CORS_ORIGINS = [
     if origin.strip()
 ]
 
-app = FastAPI(title="StackForge FastAPI")
+app = FastAPI(title="LetsInit FastAPI")
 
 app.add_middleware(
     CORSMiddleware,

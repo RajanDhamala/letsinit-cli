@@ -1,15 +1,23 @@
 {
-  "name": "stack-installer-cli",
+  "name": "letsinit",
   "version": "1.1.0",
-  "description": "Interactive CLI for scaffolding frontend, backend, mobile, and API projects",
+  "description": "LetsInit CLI for scaffolding frontend, backend, mobile, and API projects",
   "bin": {
-    "stack-installer": "./cli.mjs"
+    "letsinit": "cli.mjs"
   },
   "files": [
     "cli.mjs",
     "templates"
   ],
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RajanDhamala/cli.git"
+  },
+  "homepage": "https://github.com/RajanDhamala/cli#readme",
+  "bugs": {
+    "url": "https://github.com/RajanDhamala/cli/issues"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
@@ -21,7 +29,9 @@
   },
   "keywords": [
     "cli",
+    "letsinit",
     "installer",
+    "scaffolding",
     "stack",
     "react",
     "node",

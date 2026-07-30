@@ -1,4 +1,4 @@
-module stackforge/fiber-sqlc
+module letsinit/fiber-sqlc
 
 go 1.22
 

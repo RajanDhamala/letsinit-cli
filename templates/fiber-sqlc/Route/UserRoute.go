@@ -3,8 +3,8 @@ package route
 import (
 	"github.com/gofiber/fiber/v2"
 
-	controller "stackforge/fiber-sqlc/Controller"
-	middleware "stackforge/fiber-sqlc/Middleware"
+	controller "letsinit/fiber-sqlc/Controller"
+	middleware "letsinit/fiber-sqlc/Middleware"
 )
 
 func UserRouter(app *fiber.App, ctrl *controller.Controller) {

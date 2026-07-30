@@ -10,9 +10,9 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
 
-	controller "stackforge/fiber-sqlc/Controller"
-	route "stackforge/fiber-sqlc/Route"
-	sqlc "stackforge/fiber-sqlc/db/sqlc"
+	controller "letsinit/fiber-sqlc/Controller"
+	route "letsinit/fiber-sqlc/Route"
+	sqlc "letsinit/fiber-sqlc/db/sqlc"
 )
 
 func main() {
