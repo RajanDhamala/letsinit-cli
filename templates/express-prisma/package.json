@@ -7,8 +7,8 @@
     "node": ">=22.18.0"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.9.1",
-    "@prisma/client": "^7.9.1",
+    "@prisma/adapter-pg": "6.19.3",
+    "@prisma/client": "6.19.3",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -24,11 +24,10 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "node --watch index.js"
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",
-    "nodemon": "^3.1.14",
-    "prisma": "^7.9.1"
+    "prisma": "6.19.3"
   }
 }

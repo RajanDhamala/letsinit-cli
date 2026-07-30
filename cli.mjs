@@ -15,6 +15,7 @@ function log(...x) {
 }
 
 const cliRoot = path.dirname(fileURLToPath(import.meta.url));
+
 const templateDirectories = {
   Js_react: "react-js",
   Ts_react: "react-ts",
@@ -33,6 +34,13 @@ const nodeStacks = new Set([
   "Express_Mongoose",
   "Expo",
 ]);
+
+const pythonStacks = new Set(["Django", "FastAPI"]);
+
+const systemPythonCommand = process.platform === "win32" ? "py -3" : "python3";
+const virtualEnvironmentPython = process.platform === "win32"
+  ? ".venv\\Scripts\\python.exe"
+  : ".venv/bin/python";
 
 const ecosystemInstallCommands = {
   Fiber_Sqlc: "go mod download",
@@ -166,18 +174,32 @@ const Main = async () => {
     fs.removeSync(path.join(targetDir, "pnpm-lock.yaml"));
   }
 
-  const installCommand = package_manager
-    ? `${package_manager} install`
-    : ecosystemInstallCommands[stack_option];
-
-  if (installCommand) {
+  if (pythonStacks.has(stack_option)) {
     await runCommand(
-      installCommand,
+      `${systemPythonCommand} -m venv .venv`,
       { cwd: targetDir },
-      package_manager
-        ? ` Installing dependencies with ${package_manager}...`
-        : " Installing dependencies..."
+      " Creating Python virtual environment..."
     );
+
+    await runCommand(
+      `${virtualEnvironmentPython} -m pip install -r requirements.txt`,
+      { cwd: targetDir },
+      " Installing Python dependencies..."
+    );
+  } else {
+    const installCommand = package_manager
+      ? `${package_manager} install`
+      : ecosystemInstallCommands[stack_option];
+
+    if (installCommand) {
+      await runCommand(
+        installCommand,
+        { cwd: targetDir },
+        package_manager
+          ? ` Installing dependencies with ${package_manager}...`
+          : " Installing dependencies..."
+      );
+    }
   }
 
   const ignorePath = path.join(targetDir, ".gitignore");
@@ -213,11 +235,11 @@ const Main = async () => {
     console.log(chalk.cyanBright("→ set -a; . ./.env; set +a"));
     console.log(chalk.cyanBright("→ go run ."));
   } else if (stack_option === "Django") {
-    console.log(chalk.cyanBright("→ python -m pip install -r requirements.txt"));
-    console.log(chalk.cyanBright("→ python manage.py runserver"));
+    console.log(
+      chalk.cyanBright(`→ ${virtualEnvironmentPython} manage.py runserver`)
+    );
   } else {
-    console.log(chalk.cyanBright("→ python -m pip install -r requirements.txt"));
-    console.log(chalk.cyanBright("→ python main.py"));
+    console.log(chalk.cyanBright(`→ ${virtualEnvironmentPython} main.py`));
   }
 };
 

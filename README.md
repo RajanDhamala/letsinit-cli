@@ -38,7 +38,8 @@ npx stack-installer-cli
 Follow the interactive prompts to:
 1. Choose your tech stack
 2. Choose npm or pnpm for Node.js and Expo projects
-3. Name your project
+3. Choose whether to create a `.venv` for Django and FastAPI projects
+4. Name your project
 
 ##  Available Stacks
 
@@ -206,6 +207,9 @@ Your API will be running on `http://localhost:3000`.
 
 ### Expo Projects
 
+The Expo template targets SDK 54 so projects open in the Expo Go version
+distributed through the public mobile app stores during the SDK 57 transition.
+
 ```bash
 cd your-project-name
 npm run start
@@ -214,8 +218,29 @@ npm run start
 
 ### Django and FastAPI Projects
 
-The CLI prints the matching `pip install` and start commands after creating the
-project.
+For Python stacks, the CLI asks whether to create a project-local `.venv` and
+install dependencies. The recommended answer is selected by default. When
+accepted, dependencies are installed inside `.venv`, and the printed start
+command uses that environment's Python interpreter directly. Manual activation
+is optional.
+
+If you decline, the CLI only creates the project files. It does not install
+anything into the system Python. Activate an environment you manage, then run
+the printed dependency installation and start commands.
+
+```bash
+# Django on Linux and macOS
+.venv/bin/python manage.py runserver
+
+# FastAPI on Linux and macOS
+.venv/bin/python main.py
+
+# Django on Windows
+.venv\Scripts\python.exe manage.py runserver
+
+# FastAPI on Windows
+.venv\Scripts\python.exe main.py
+```
 
 ##  Customization
 
