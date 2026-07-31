@@ -115,6 +115,20 @@ const Main = async () => {
     log(chalk.gray("Package manager:"), package_manager);
   }
 
+  let create_python_venv = false;
+  if (pythonStacks.has(stack_option)) {
+    const answer = await inquirer.prompt([
+      {
+        name: "create_python_venv",
+        type: "confirm",
+        message: "Create a Python virtual environment?",
+        default: true,
+      },
+    ]);
+    create_python_venv = answer.create_python_venv;
+    log(chalk.gray("Create Python virtual environment:"), create_python_venv);
+  }
+
   let folder_name = "letsinit-project";
 
   const { folder_name: fn } = await inquirer.prompt([
@@ -174,7 +188,7 @@ const Main = async () => {
     fs.removeSync(path.join(targetDir, "pnpm-lock.yaml"));
   }
 
-  if (pythonStacks.has(stack_option)) {
+  if (create_python_venv) {
     await runCommand(
       `${systemPythonCommand} -m venv .venv`,
       { cwd: targetDir },
@@ -224,6 +238,16 @@ const Main = async () => {
   console.log(chalk.green.bold("Project setup completed!"));
   console.log(chalk.cyanBright(`→ cd ${JSON.stringify(folder_name)}`));
 
+  const pythonCommand = create_python_venv
+    ? virtualEnvironmentPython
+    : systemPythonCommand;
+
+  if (pythonStacks.has(stack_option) && !create_python_venv) {
+    console.log(
+      chalk.cyanBright(`→ ${pythonCommand} -m pip install -r requirements.txt`)
+    );
+  }
+
   if (nodeStacks.has(stack_option)) {
     console.log(
       chalk.cyanBright(
@@ -235,11 +259,9 @@ const Main = async () => {
     console.log(chalk.cyanBright("→ set -a; . ./.env; set +a"));
     console.log(chalk.cyanBright("→ go run ."));
   } else if (stack_option === "Django") {
-    console.log(
-      chalk.cyanBright(`→ ${virtualEnvironmentPython} manage.py runserver`)
-    );
+    console.log(chalk.cyanBright(`→ ${pythonCommand} manage.py runserver`));
   } else {
-    console.log(chalk.cyanBright(`→ ${virtualEnvironmentPython} main.py`));
+    console.log(chalk.cyanBright(`→ ${pythonCommand} main.py`));
   }
 };
 
