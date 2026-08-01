@@ -1,6 +1,6 @@
 {
   "name": "letsinit",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "LetsInit CLI for scaffolding frontend, backend, mobile, and API projects",
   "bin": {
     "letsinit": "cli.mjs"
