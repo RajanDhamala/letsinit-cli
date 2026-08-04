@@ -11,7 +11,7 @@ LetsInit is an interactive command-line tool that scaffolds ready-to-use starter
 - **Lightning Fast Setup**: Get a complete project running in under 2 minutes
 - **Pre-configured Frontend Styling**: Tailwind CSS for React and NativeWind for Expo
 -  **Built-in Routing**: React Router and Express routes already set up
-- **Authentication Boilerplate**: JWT patterns in the Express and Fiber templates
+- **Authentication Boilerplate**: JWT patterns in the Express, Fiber, and Django templates
 -  **Beautiful CLI Experience**: Interactive prompts with colorful feedback
 - **npm or pnpm**: Choose the package manager for Node.js and Expo templates
 - **Smart Configuration**: Creates the project structure, prepares `.env`, and installs ecosystem dependencies
@@ -50,7 +50,7 @@ Follow the interactive prompts to:
 | **Express + Prisma** | Node.js API with Prisma ORM | Express, Prisma, PostgreSQL, JWT, CORS, Zod |
 | **Express + Mongoose** | Node.js API with MongoDB | Express, Mongoose, JWT, CORS, Zod |
 | **Fiber + SQLC** | Go API with generated database queries | Fiber, SQLC, pgx, PostgreSQL |
-| **Django** | Basic Python web project | Django, CORS, dotenv, SQLite |
+| **Django** | Python API starter | Django, CORS, SQLite, user CRUD, JWT helpers |
 | **FastAPI** | Basic Python API | FastAPI, Uvicorn, CORS, dotenv |
 | **Expo** | Minimal React Native app | Expo SDK, TypeScript, NativeWind, Tailwind CSS |
 
@@ -230,12 +230,14 @@ the printed dependency installation and start commands.
 
 ```bash
 # Django on Linux and macOS
+.venv/bin/python manage.py migrate
 .venv/bin/python manage.py runserver
 
 # FastAPI on Linux and macOS
 .venv/bin/python main.py
 
 # Django on Windows
+.venv\Scripts\python.exe manage.py migrate
 .venv\Scripts\python.exe manage.py runserver
 
 # FastAPI on Windows

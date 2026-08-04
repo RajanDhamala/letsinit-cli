@@ -1,10 +1,11 @@
 from django.contrib import admin
 from django.http import JsonResponse
-from django.urls import path
+from django.shortcuts import render
+from django.urls import include, path
 
 
 def read_root(request):
-    return JsonResponse({"message": "Django server is running"})
+    return render(request, "index.html")
 
 
 def health_check(request):
@@ -12,7 +13,8 @@ def health_check(request):
 
 
 urlpatterns = [
+    path("", read_root),
     path("admin/", admin.site.urls),
     path("health/", health_check),
-    path("", read_root),
+    path("user/", include("apps.users.urls")),
 ]

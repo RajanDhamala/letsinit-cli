@@ -13,15 +13,16 @@ def get_list(name, default):
     return [item.strip() for item in value.split(",") if item.strip()]
 
 
-
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-change-me")
+SECRET_KEY = os.getenv(
+    "SECRET_KEY",
+    "django-insecure-change-this-key-before-production-7a2c9e4f1b6d8",
+)
 DEBUG = os.getenv("DEBUG", "true").lower() == "true"
 
 ALLOWED_HOSTS = get_list(
     "ALLOWED_HOSTS",
     "localhost,127.0.0.1,0.0.0.0",
 )
-
 
 
 INSTALLED_APPS = [
@@ -31,6 +32,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "apps.users.apps.UsersConfig",
     "corsheaders",
 ]
 
@@ -50,7 +52,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

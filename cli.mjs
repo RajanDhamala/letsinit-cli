@@ -259,6 +259,7 @@ const Main = async () => {
     console.log(chalk.cyanBright("→ set -a; . ./.env; set +a"));
     console.log(chalk.cyanBright("→ go run ."));
   } else if (stack_option === "Django") {
+    console.log(chalk.cyanBright(`→ ${pythonCommand} manage.py migrate`));
     console.log(chalk.cyanBright(`→ ${pythonCommand} manage.py runserver`));
   } else {
     console.log(chalk.cyanBright(`→ ${pythonCommand} main.py`));
