@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="LetsInit Django API boilerplate with a UUID user model, JWT helpers, and JSON auth routes.">
+  <title>LetsInit Django API</title>
+  <script>
+    (() => {
+      const storageKey = "letsinit-django-theme";
+      let theme = null;
+
+      try {
+        theme = localStorage.getItem(storageKey);
+      } catch (_error) {
+        theme = null;
+      }
+
+      if (theme !== "light" && theme !== "dark") {
+        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      }
+
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --background: #ffffff;
+      --foreground: #171717;
+      --card: rgba(255, 255, 255, 0.82);
+      --muted: #f5f5f5;
+      --muted-foreground: #737373;
+      --border: #e5e5e5;
+      --emerald: #10b981;
+      --emerald-soft: rgba(16, 185, 129, 0.1);
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --page-start: #ffffff;
+      --page-middle: rgba(255, 255, 255, 0.9);
+      --page-end: #fafafa;
+      --surface: rgba(255, 255, 255, 0.8);
+      --surface-soft: rgba(255, 255, 255, 0.7);
+      --panel: rgba(255, 255, 255, 0.9);
+      --headline-start: #171717;
+      --headline-end: rgba(23, 23, 23, 0.7);
+      --strong-muted: rgba(23, 23, 23, 0.82);
+      --brand-muted: rgba(115, 115, 115, 0.82);
+      --button-hover: rgba(23, 23, 23, 0.9);
+      --glow-top: rgba(23, 23, 23, 0.12);
+      --health-text: #047857;
+      --preview-shadow: 0 22px 60px -26px rgba(0, 0, 0, 0.42);
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --background: #0a0a0a;
+      --foreground: #fafafa;
+      --card: rgba(23, 23, 23, 0.82);
+      --muted: #242424;
+      --muted-foreground: #a3a3a3;
+      --border: #2e2e2e;
+      --emerald: #34d399;
+      --emerald-soft: rgba(52, 211, 153, 0.12);
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.34);
+      --page-start: #0a0a0a;
+      --page-middle: #0d0d0d;
+      --page-end: #111111;
+      --surface: rgba(23, 23, 23, 0.82);
+      --surface-soft: rgba(23, 23, 23, 0.7);
+      --panel: rgba(20, 20, 20, 0.9);
+      --headline-start: #fafafa;
+      --headline-end: rgba(250, 250, 250, 0.7);
+      --strong-muted: rgba(250, 250, 250, 0.82);
+      --brand-muted: rgba(163, 163, 163, 0.82);
+      --button-hover: #e5e5e5;
+      --glow-top: rgba(250, 250, 250, 0.08);
+      --health-text: #6ee7b7;
+      --preview-shadow: 0 22px 60px -26px rgba(0, 0, 0, 0.88);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-width: 320px;
+      background: var(--background);
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--foreground);
+      background: linear-gradient(to bottom, var(--page-start) 0%, var(--page-middle) 58%, var(--page-end) 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .page {
+      position: relative;
+      min-height: 100vh;
+      isolation: isolate;
+    }
+
+    .glows {
+      position: fixed;
+      z-index: -1;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .glow {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(64px);
+    }
+
+    .glow-top {
+      top: -96px;
+      right: -112px;
+      width: 256px;
+      height: 256px;
+      background: var(--glow-top);
+    }
+
+    .glow-bottom {
+      bottom: -80px;
+      left: -96px;
+      width: 224px;
+      height: 224px;
+      background: rgba(16, 185, 129, 0.24);
+    }
+
+    .container {
+      width: min(1024px, calc(100% - 48px));
+      margin-inline: auto;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding-top: 24px;
+      padding-bottom: 32px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand-mark span {
+      color: transparent;
+      background: linear-gradient(45deg, var(--headline-start), var(--headline-end));
+      background-clip: text;
+      -webkit-background-clip: text;
+      font-size: 1.15rem;
+      font-weight: 650;
+      letter-spacing: -0.06em;
+    }
+
+    .brand-copy {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .brand-copy strong {
+      font-size: 0.95rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-copy small {
+      margin-top: 3px;
+      color: var(--brand-muted);
+      font-size: 0.7rem;
+      font-weight: 550;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--muted-foreground);
+      font-size: 0.75rem;
+      font-weight: 550;
+    }
+
+    .nav-link {
+      padding: 6px 16px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      transition: background 160ms ease, border-color 160ms ease;
+    }
+
+    .nav-link:hover {
+      border-color: var(--border);
+      background: var(--muted);
+    }
+
+    .theme-toggle {
+      display: inline-grid;
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--foreground);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--muted-foreground);
+      background: var(--muted);
+      transform: translateY(-1px);
+    }
+
+    .theme-toggle svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .theme-toggle .sun-icon {
+      display: none;
+    }
+
+    :root[data-theme="dark"] .theme-toggle .moon-icon {
+      display: none;
+    }
+
+    :root[data-theme="dark"] .theme-toggle .sun-icon {
+      display: block;
+    }
+
+    .github-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 16px;
+      border: 1px solid var(--foreground);
+      border-radius: 999px;
+      color: var(--background);
+      background: var(--foreground);
+      box-shadow: var(--shadow-sm);
+      font-weight: 650;
+      transition: background 160ms ease, transform 160ms ease;
+    }
+
+    .github-button:hover {
+      background: var(--button-hover);
+      transform: translateY(-1px);
+    }
+
+    .github-button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      padding-top: 8px;
+      padding-bottom: 64px;
+    }
+
+    .hero-copy,
+    .preview-column {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted-foreground);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(10px);
+      font-size: 0.7rem;
+      font-weight: 550;
+    }
+
+    .badge-dot {
+      display: inline-grid;
+      width: 16px;
+      height: 16px;
+      place-items: center;
+      border-radius: 999px;
+      color: var(--emerald);
+      background: var(--emerald-soft);
+      font-size: 0.58rem;
+    }
+
+    .headline-block {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      color: transparent;
+      background: linear-gradient(to bottom, var(--headline-start), var(--headline-end));
+      background-clip: text;
+      -webkit-background-clip: text;
+      font-size: clamp(2.55rem, 7vw, 3rem);
+      font-weight: 650;
+      letter-spacing: -0.045em;
+      line-height: 1.04;
+    }
+
+    .intro {
+      max-width: 576px;
+      margin: 0;
+      color: var(--muted-foreground);
+      font-size: 0.96rem;
+      line-height: 1.65;
+    }
+
+    .intro strong {
+      color: var(--foreground);
+      font-weight: 650;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+
+    .primary-button {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 20px;
+      border-radius: 999px;
+      color: var(--background);
+      background: var(--foreground);
+      box-shadow: 0 18px 45px -18px rgba(0, 0, 0, 0.7);
+      font-size: 0.875rem;
+      font-weight: 650;
+      transition: background 160ms ease, transform 160ms ease;
+    }
+
+    .primary-button:hover {
+      background: var(--button-hover);
+      transform: translateY(-1px);
+    }
+
+    .primary-button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .arrow-icon {
+      transition: transform 160ms ease;
+    }
+
+    .primary-button:hover .arrow-icon {
+      transform: translateX(2px);
+    }
+
+    .pill-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill {
+      padding: 4px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted-foreground);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(10px);
+      font: 0.7rem/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      color: var(--muted-foreground);
+    }
+
+    .feature-card {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-soft);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .feature-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--strong-muted);
+      font-size: 0.73rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .feature-title svg {
+      width: 14px;
+      height: 14px;
+      flex: 0 0 auto;
+    }
+
+    .feature-card p {
+      margin: 4px 0 0;
+      font-size: 0.75rem;
+      line-height: 1.6;
+    }
+
+    .preview {
+      position: relative;
+      width: min(100%, 448px);
+      margin-inline: auto;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: var(--panel);
+      box-shadow: var(--preview-shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .window-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      color: var(--muted-foreground);
+      font-size: 0.625rem;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .window-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+    }
+
+    .dot-red { background: rgba(244, 63, 94, 0.8); }
+    .dot-yellow { background: rgba(250, 204, 21, 0.9); }
+    .dot-green { background: rgba(16, 185, 129, 0.8); }
+
+    .window-label {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--muted);
+      font-weight: 550;
+    }
+
+    .preview-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--panel);
+    }
+
+    .fake-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .fake-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .fake-title {
+      width: 112px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(to right, var(--headline-start), var(--headline-end), var(--border));
+    }
+
+    .fake-subtitle {
+      width: 80px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--muted);
+    }
+
+    .health-chip {
+      display: inline-flex;
+      height: 28px;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px;
+      border-radius: 999px;
+      color: var(--health-text);
+      background: var(--emerald-soft);
+      font-size: 0.64rem;
+      font-weight: 700;
+    }
+
+    .health-chip::before {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--emerald);
+      content: "";
+    }
+
+    .fake-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .fake-card {
+      display: flex;
+      height: 56px;
+      align-items: flex-end;
+      padding: 8px;
+      border-radius: 12px;
+      color: var(--muted-foreground);
+      background: var(--muted);
+      font-size: 0.58rem;
+      font-weight: 650;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .terminal {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      color: #d1fae5;
+      background: rgba(0, 0, 0, 0.95);
+      font: 0.68rem/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .terminal-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(52, 211, 153, 0.82);
+    }
+
+    .terminal-title svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .terminal p {
+      margin: 0;
+    }
+
+    .terminal .success {
+      color: rgba(52, 211, 153, 0.92);
+    }
+
+    .terminal .ready {
+      color: rgba(110, 231, 183, 0.95);
+    }
+
+    @media (min-width: 640px) {
+      .cta-row {
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .features {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .navbar {
+        padding-top: 32px;
+        padding-bottom: 32px;
+      }
+
+      .hero {
+        flex-direction: row;
+        align-items: center;
+        gap: 48px;
+        padding-bottom: 96px;
+      }
+
+      h1 {
+        font-size: 3rem;
+      }
+    }
+
+    @media (max-width: 639px) {
+      .container {
+        width: min(100% - 32px, 1024px);
+      }
+
+      .navbar {
+        padding-bottom: 24px;
+      }
+
+      .nav-link,
+      .github-button span {
+        display: none;
+      }
+
+      .github-button {
+        width: 36px;
+        height: 36px;
+        justify-content: center;
+        padding: 0;
+      }
+
+      .hero-copy {
+        gap: 24px;
+      }
+
+      .preview {
+        padding: 12px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="glows" aria-hidden="true">
+      <div class="glow glow-top"></div>
+      <div class="glow glow-bottom"></div>
+    </div>
+
+    <header class="container navbar">
+      <a class="brand" href="/" aria-label="LetsInit Django API home">
+        <span class="brand-mark" aria-hidden="true"><span>LI</span></span>
+        <span class="brand-copy">
+          <strong>LetsInit</strong>
+          <small>Django API</small>
+        </span>
+      </a>
+
+      <nav class="nav-actions" aria-label="Project links">
+        <a class="nav-link" href="/admin/">Django Admin</a>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/>
+          </svg>
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.42 1.42"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+          </svg>
+        </button>
+        <a class="github-button" href="https://github.com/RajanDhamala/cli" target="_blank" rel="noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 .7a11.5 11.5 0 0 0-3.64 22.4c.58.1.79-.25.79-.56v-2.22c-3.22.7-3.9-1.37-3.9-1.37-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.2 1.77 1.2 1.03 1.78 2.7 1.27 3.36.97.1-.75.4-1.27.73-1.56-2.57-.3-5.27-1.3-5.27-5.7 0-1.26.44-2.29 1.18-3.1-.12-.3-.51-1.47.11-3.06 0 0 .96-.31 3.16 1.18a10.9 10.9 0 0 1 5.75 0c2.2-1.5 3.16-1.18 3.16-1.18.62 1.59.23 2.76.11 3.06.74.81 1.18 1.84 1.18 3.1 0 4.41-2.7 5.4-5.28 5.69.42.36.78 1.07.78 2.16v3.2c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .7Z"/>
+          </svg>
+          <span>Star the CLI</span>
+        </a>
+      </nav>
+    </header>
+
+    <main class="container hero">
+      <section class="hero-copy">
+        <div class="badge">
+          <span class="badge-dot" aria-hidden="true">&#9679;</span>
+          <span>Django + SQLite + user auth, ready to extend</span>
+        </div>
+
+        <div class="headline-block">
+          <h1>Your Django API boilerplate,<br>shipped from the CLI.</h1>
+          <p class="intro">
+            <strong>LetsInit</strong> gives you Django 6 with environment settings,
+            CORS, SQLite, a UUID user model, its initial migration, JSON auth routes,
+            health checks, Admin, and JWT helpers—without unnecessary framework noise.
+          </p>
+        </div>
+
+        <div class="cta-row">
+          <a class="primary-button" href="/user/">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m13 2-9 12h8l-1 8 9-12h-8l1-8Z"/>
+            </svg>
+            Open user API
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
+            </svg>
+          </a>
+          <div class="pill-wrap">
+            <span class="pill">python manage.py runserver</span>
+          </div>
+        </div>
+
+        <div class="features" aria-label="Django template features">
+          <article class="feature-card">
+            <div class="feature-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
+              </svg>
+              User auth
+            </div>
+            <p>UUID model, one initial migration, hashed passwords, and JWT cookie helpers.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m13 2-9 12h8l-1 8 9-12h-8l1-8Z"/>
+              </svg>
+              Django ready
+            </div>
+            <p>Settings, CORS, Admin, health route, SQLite, and Docker defaults are wired.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 17 10 11 4 5"/><path d="M12 19h8"/>
+              </svg>
+              API routes
+            </div>
+            <p>Register, login, session, and logout routes are ready under /user/.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="preview-column" aria-label="Django API preview">
+        <div class="preview">
+          <div class="window-bar">
+            <div class="window-dots" aria-hidden="true">
+              <span class="dot-red"></span>
+              <span class="dot-yellow"></span>
+              <span class="dot-green"></span>
+            </div>
+            <span class="window-label">django &#8226; 8000</span>
+          </div>
+
+          <div class="preview-body">
+            <div class="fake-header">
+              <div class="fake-copy" aria-hidden="true">
+                <span class="fake-title"></span>
+                <span class="fake-subtitle"></span>
+              </div>
+              <a class="health-chip" href="/health/">Healthy</a>
+            </div>
+
+            <div class="fake-grid" aria-label="Included Django pieces">
+              <div class="fake-card">Model</div>
+              <div class="fake-card">Migration</div>
+              <div class="fake-card">Routes</div>
+            </div>
+
+            <div class="terminal">
+              <div class="terminal-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 17 10 11 4 5"/><path d="M12 19h8"/>
+                </svg>
+                <span>letsinit &#9656; django</span>
+              </div>
+              <p>$ python manage.py migrate</p>
+              <p class="success">&#10004; Applied users.0001_initial</p>
+              <p>$ python manage.py runserver</p>
+              <p class="success">GET&nbsp; /health/ &nbsp;&#8594;&nbsp; 200 OK</p>
+              <p class="success">POST /user/register/ &#8594;&nbsp; User created</p>
+              <p class="ready">Ready at http://localhost:8000</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    (() => {
+      const storageKey = "letsinit-django-theme";
+      const root = document.documentElement;
+      const toggle = document.getElementById("theme-toggle");
+
+      const updateToggle = () => {
+        const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
+        const label = `Switch to ${nextTheme} mode`;
+        toggle.setAttribute("aria-label", label);
+        toggle.setAttribute("title", label);
+      };
+
+      toggle.addEventListener("click", () => {
+        const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
+        root.dataset.theme = nextTheme;
+
+        try {
+          localStorage.setItem(storageKey, nextTheme);
+        } catch (_error) {
+          // The selected theme still applies for the current page.
+        }
+
+        updateToggle();
+      });
+
+      updateToggle();
+    })();
+  </script>
+</body>
+</html>
