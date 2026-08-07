@@ -256,10 +256,10 @@ const Main = async () => {
         `→ ${package_manager} run ${nodeStartScripts[stack_option]}`
       )
     );
-  } else if (stack_option === "Fiber_Sqlc" || stack_option == "Go_http") {
-    console.log(chalk.cyanBright("→ docker-compose up -d postgres"));
-    console.log(chalk.cyanBright("→ set -a; . ./.env; set +a"));
-    console.log(chalk.cyanBright("→ go run ."));
+  } else if (stack_option == "Go_http") {
+    console.log(chalk.cyanBright("→ go run ./cmd/api/main.go"));
+  } else if (stack_option == "Fiber_Sqlc") {
+    console.log(chalk.cyanBright("→ go run main.go"));
   } else if (stack_option === "Django") {
     console.log(chalk.cyanBright(`→ ${pythonCommand} manage.py migrate`));
     console.log(chalk.cyanBright(`→ ${pythonCommand} manage.py runserver`));
