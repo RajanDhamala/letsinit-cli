@@ -25,6 +25,7 @@ const templateDirectories = {
   Django: "django",
   FastAPI: "fastapi",
   Expo: "expo",
+  Go_http: "go-http",
 };
 
 const nodeStacks = new Set([
@@ -84,6 +85,7 @@ const Main = async () => {
     { name: "Express + Prisma", value: "Express_Prisma" },
     { name: "Express + Mongoose", value: "Express_Mongoose" },
     { name: "Fiber + SQLC", value: "Fiber_Sqlc" },
+    { name: "Go+SQLC", value: "Go_http" },
     { name: "Django", value: "Django" },
     { name: "FastAPI", value: "FastAPI" },
     { name: "Expo", value: "Expo" },
@@ -254,7 +256,7 @@ const Main = async () => {
         `→ ${package_manager} run ${nodeStartScripts[stack_option]}`
       )
     );
-  } else if (stack_option === "Fiber_Sqlc") {
+  } else if (stack_option === "Fiber_Sqlc" || stack_option == "Go_http") {
     console.log(chalk.cyanBright("→ docker-compose up -d postgres"));
     console.log(chalk.cyanBright("→ set -a; . ./.env; set +a"));
     console.log(chalk.cyanBright("→ go run ."));
