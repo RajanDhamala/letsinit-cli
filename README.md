@@ -20,8 +20,29 @@ LetsInit is an interactive command-line tool that scaffolds ready-to-use starter
 
 ### Installation
 
+Use the native Go TUI on Linux, macOS, or Windows. The installer detects the
+host operating system and CPU architecture, downloads the matching release,
+and verifies its SHA-256 checksum before installation.
+
 ```bash
-# Run directly with npx (recommended)
+# Linux or macOS
+curl -fsSL https://raw.githubusercontent.com/RajanDhamala/letsinit-cli/main/install.sh | sh
+```
+
+```powershell
+# Windows PowerShell
+irm https://raw.githubusercontent.com/RajanDhamala/letsinit-cli/main/install.ps1 | iex
+```
+
+You can also download the archive for your platform from
+[GitHub Releases](https://github.com/RajanDhamala/letsinit-cli/releases). Keep
+the `letsinit` executable and the bundled `templates/` directory together when
+installing manually.
+
+The Node.js CLI remains available:
+
+```bash
+# Run directly with npx
 npx letsinit
 
 # Or install globally
@@ -74,6 +95,7 @@ building its image.
 | Flag | Description | Example |
 |------|-------------|---------|
 | `-v, --verbose` | Show detailed output during installation | `npx letsinit -v` |
+| `--version` | Print the native Go CLI version | `letsinit --version` |
 
 ### Examples
 
@@ -313,7 +335,7 @@ MIT License - feel free to use this in your projects!
 ##  Support
 
 Having issues? Found a bug? 
-- Open an issue on [GitHub](https://github.com/RajanDhamala/cli)
+- Open an issue on [GitHub](https://github.com/RajanDhamala/letsinit-cli)
 - Check our documentation
 - Ask questions in discussions
 
