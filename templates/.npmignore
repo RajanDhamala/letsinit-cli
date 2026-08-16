@@ -1,6 +1,7 @@
 **/node_modules/
 **/dist/
 **/build/
+**/.next/
 **/.expo/
 **/.venv/
 **/__pycache__/

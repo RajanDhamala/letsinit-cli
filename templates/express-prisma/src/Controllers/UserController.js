@@ -5,16 +5,15 @@ import prisma from "../Utils/PrismaProvider.js"
 import { z } from "zod"
 import { hashPassword,verifyPassword,CreateAccessToken,CreateRefreshToken } from "../Utils/Authutils.js"
 
-
 const registerSchema = z.object({
   email: z.email(),
-  fullname: z.string().min(5).max(20),
-  password: z.string().trim().min(6)
+  fullname: z.string().trim().min(3).max(30),
+  password: z.string().min(6)
 }).strict();
 
 const loginSchema = z.object({
   email: z.email(),
-  password: z.string().trim().min(6)
+  password: z.string().min(6)
 }).strict();
 
 const RegisterUser = asyncHandler(async (req, res) => {
@@ -26,9 +25,9 @@ const RegisterUser = asyncHandler(async (req, res) => {
 
   const value = result.data;
 
-  const email = value.email.toLowerCase(); 
+  const email = value.email.toLowerCase();
 
-  const userExists = await prisma.user.findFirst({
+  const userExists = await prisma.user.findUnique({
     where: { email }
   });
 
@@ -36,7 +35,7 @@ const RegisterUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "User with this email already exists");
   }
 
-  const hashedPwd = await hashPassword(value.password.trim());
+  const hashedPwd = await hashPassword(value.password);
   const newUser = await prisma.user.create({
     data: {
       email,
@@ -65,7 +64,7 @@ const LoginUser = asyncHandler(async (req, res) => {
   const value = result.data;
   const email = value.email.toLowerCase();
 
-  const existingUser = await prisma.user.findFirst({
+  const existingUser = await prisma.user.findUnique({
     where: { email },
     select: {
       id: true,
@@ -78,7 +77,7 @@ const LoginUser = asyncHandler(async (req, res) => {
   if (!existingUser) {
     throw new ApiError(400, "Invalid credentials");
   }
-  const isPasswordValid = await verifyPassword(value.password.trim(), existingUser.password);
+  const isPasswordValid = await verifyPassword(value.password, existingUser.password);
   if (!isPasswordValid) {
     throw new ApiError(400, "Invalid credentials");
   }
@@ -133,9 +132,6 @@ const LogoutUser = asyncHandler(async (req, res) => {
 
   res.send(new ApiResponse(200, "User logged out successfully"));
 });
-
-
-
 
 export {
     RegisterUser,LoginUser,LogoutUser

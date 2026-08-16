@@ -19,6 +19,7 @@ const cliRoot = path.dirname(fileURLToPath(import.meta.url));
 const templateDirectories = {
   Js_react: "react-js",
   Ts_react: "react-ts",
+  Nextjs: "nextjs",
   Express_Prisma: "express-prisma",
   Express_Mongoose: "express-mongoose",
   Fiber_Sqlc: "fiber-sqlc",
@@ -28,9 +29,11 @@ const templateDirectories = {
   Go_http: "go-http",
 };
 
+
 const nodeStacks = new Set([
   "Js_react",
   "Ts_react",
+  "Nextjs",
   "Express_Prisma",
   "Express_Mongoose",
   "Expo",
@@ -50,6 +53,7 @@ const ecosystemInstallCommands = {
 const nodeStartScripts = {
   Js_react: "dev",
   Ts_react: "dev",
+  Nextjs: "dev",
   Express_Prisma: "dev",
   Express_Mongoose: "dev",
   Expo: "start",
@@ -82,6 +86,7 @@ const Main = async () => {
   const stackChoices = [
     { name: "React + JS", value: "Js_react" },
     { name: "React + TS", value: "Ts_react" },
+    { name: "Next.js + TS", value: "Nextjs" },
     { name: "Express + Prisma", value: "Express_Prisma" },
     { name: "Express + Mongoose", value: "Express_Mongoose" },
     { name: "Fiber + SQLC", value: "Fiber_Sqlc" },
