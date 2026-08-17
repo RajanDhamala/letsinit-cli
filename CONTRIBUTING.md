@@ -5,11 +5,11 @@ templates, improve existing templates, fix CLI behavior, or update documentation
 
 ## Contribution workflow
 
-1. Fork the [LetsInit CLI repository](https://github.com/RajanDhamala/cli).
+1. Fork the [LetsInit CLI repository](https://github.com/RajanDhamala/letsinit-cli.git).
 2. Clone your fork:
 
    ```bash
-   git clone https://github.com/YOUR_USERNAME/cli.git
+   git clone https://github.com/RajanDhamala/letsinit-cli.git
    cd cli
    ```
 
